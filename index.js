@@ -29,27 +29,6 @@ const verify_token = (req, res, next) => {
     }
 }
 
-
-
-
-
-
-// const verify_token =(req, res, next)=>{
-//     const bearerHeader = req.headers['authorization'];
-//     if(typeof bearerHeader === 'undefined'){
-//         res.send({result :'invalid token'})
-//     }else{
-//         const bearer = bearerHeader.split(" ")
-
-//         ;
-//         const token = bearer[1]
-//         req.token = token
-//         next();
-
-//     }x
-
-// }
-
 app.post('/add-user', async (req, res) => {
 
     let checkUser = await User.findOne({ email: req.body.email });
@@ -80,7 +59,6 @@ app.post('/add-user', async (req, res) => {
 })
 
 app.post('/login', async (req, res) => {
-    // console.log(req.body)
 
     User.findOne({ email: req.body.email }).then((response) => {
         console.log(response)
@@ -113,21 +91,12 @@ app.get('/users', async (req, res) => {
     res.send(data)
 })
 
-// app.get('/user/:id', async(req,res)=>{
-//     let id = req.params.id
-//     let data =  await User.findOne({_id:id})
-//     res.send(data)
-// })
-
 app.get('/user-profile', verify_token, (req, res) => {
     JWT.verify(req.token, secretKey, (err, authData) => {
         if (err) {
             res.send(err)
         } else {
             console.log(authData._id)
-            // User.findById(mongoose.Types.ObjectId(authData._id)).select('fullname email phone task completed_task').then((user)=>{
-            //     res.send(user)
-            // })
             User.findOne({ _id: authData._id }).then((user) => {
                 res.send({ fullname: user.fullname, email: user.email, phone: user.phone, task: user.task, completed_task: user.completed_task, id: user._id })
             })
@@ -167,10 +136,7 @@ app.put('/edit-task', async (req, res) => {
     let index = tasks.findIndex((element) => {
         return element.date === editedtask.date
     })
-    //    tasks.splice(index,1)
     tasks.splice(index, 1, editedtask)
-
-    //    tasks.unshift(editedtask)
     User.updateOne({ _id: req.body.id },
         { $set: { task: tasks } }
     ).then((resp) => {
@@ -237,7 +203,6 @@ app.post('/change-password',(req, res)=>{
                 user.updateOne({_id:req.body.id},
                     {$set:{password:hash}}
                     ).then((response)=>{
-                        // res.render('pages/verified')
                         res.send(response)
                     })
             }

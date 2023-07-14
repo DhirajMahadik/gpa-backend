@@ -18,7 +18,7 @@ try {
         from:"dhirajdemo9221@gmail.com",
         to:email,
         subject:"Recover your password",
-        html:'<p> hello '+name+'please click here to <a href="http://localhost:5500/recover-password/'+user_id+'"> reset </a> your password</p>'
+        html:'<p> hello '+ name +' please click here to <a href="http://localhost:5500/recover-password/'+user_id+'"> reset </a> your password</p>'
     }
 
     transporter.sendMail(mailOptions, (err, info)=>{
